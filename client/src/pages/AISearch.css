@@ -1,0 +1,86 @@
+
+
+.main-container{
+  container-type: inline-size;
+  width: 100vw;
+  height: 100vh;
+  background-color: #101915;
+  font-family: "Raleway", sans-serif;
+}
+
+.split-top{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100cqw;
+  height: 50cqh;
+  background-color: #FFFDF7;
+  border-radius: 0 0 2vw 2vw;
+}
+
+.list-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+}
+
+.list-container span {
+  font-size: 2vw;
+  color: #0A2342;
+  border: none;
+}
+
+.list-container .list-block {
+  width: 50cqw;
+  height: 10cqw;
+  outline: 1px solid #0A2342;
+  border-radius: 1vw;
+}
+
+.divider-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3cqw;
+  background: linear-gradient(to bottom, #0A2342 50%, #FFFDF7 50%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.split-bottom {
+  display: flex;
+  width: 100cqw;
+  height: 50cqh;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  color: #FFFDF7;
+  font-size: 2vw;
+  text-align: center;
+}
+
+.input-field {
+  background-color: #203129;
+  border-radius: 0.5cqw;
+  width: 40cqw;
+  min-height: 3cqw;
+  max-height: 6cqw;
+  border: none;
+  font-size: 1vw;
+  color: #fffdf7;
+  padding: 0.5cqw;
+  box-sizing: border-box;
+  resize: none;
+}
+.input-field:focus {
+  outline: none;
+}

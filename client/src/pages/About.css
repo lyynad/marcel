@@ -1,0 +1,185 @@
+@property --bkgrnd-spread {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 5%;
+}
+
+.home-container {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(ellipse at bottom left, rgba(247, 143, 105, calc(var(--bkgrnd-spread))) 5%, #FDFFFC var(--bkgrnd-spread));
+    animation: spread 2s ease-in-out forwards;
+    font-family: "Montserrat", sans-serif;
+}
+@keyframes spread {
+    0% {
+        --bkgrnd-spread: 6%;
+    }
+    100% {
+        --bkgrnd-spread: 60%;
+    }
+}
+
+.content-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-title {
+    align-self: center;
+    margin-top: 4vw;
+    font-size: 1.7vw;
+    margin-bottom: 0;
+}
+
+.underline {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 5vw;
+    margin-top: 2vw;
+}
+.linedot{
+    width: 0.7vw;
+    height: 0.7vw;
+    outline: 0.3vw solid #011627;
+    border-radius: 100%;
+}
+.line{
+    width: 30vw;
+    height: 0.3vw;
+    background-color: #011627;
+    align-self: center;
+}
+
+.recommended-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+
+.recommended-container p {
+    margin-left: 10vw;
+    margin-top: 2vw;
+    font-size: 1.5vw;
+}
+
+.technologies-text {
+    font-size: 1.3vw;
+    align-self: center;
+    margin-bottom: 2vw;
+    width: 50vw;
+}
+
+.technologies-block {
+    margin-top: 1vw;
+    display: flex;
+    gap: 7vw;
+    align-self: center;
+    position: relative;
+}
+
+.technologies-item {
+    display: flex;
+    flex-direction: column;
+    width: 10vw;
+    height: 10vw;
+    gap: 1vw;
+    justify-content: center;
+    position: relative;
+    z-index: 0;
+}
+.technologies-item img {
+    width: 5vw;
+    height: 5vw;
+    align-self: center;
+}
+
+.technologies-title {
+    align-self: center;
+    font-size: 1.2vw;
+}
+
+@property --angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --percentage-transparent {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: -1000%;
+}
+
+.technologies-item::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: conic-gradient(from var(--angle), transparent var(--percentage-transparent), #f78e69 10%);
+    padding: 0.1vw;
+    z-index: -1;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    animation: morphBorder 3s linear 1s forwards, rotate 5s linear 1s infinite;
+    display: block;
+}
+@keyframes morphBorder {
+    0% {
+        --percentage-transparent: -10%;
+    }
+    100% {
+        --percentage-transparent: 80%;
+    }
+}
+@keyframes rotate {
+    0% {
+        --angle: 0deg;
+    }
+    100% {
+        --angle: 360deg;
+    }
+}
+
+.technologies-starred-text {
+    font-size: 0.7vw;
+    margin-left: 20vw;
+    margin-top: 1vw;
+    width: fit-content;
+    text-align: center;
+}
+
+.footer-container {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 4vw;
+    gap: 4vw;
+}
+
+.footer-item {
+    display: flex;
+    align-items: center;
+}
+.footer-item a {
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    color: #231547;
+}
+.footer-item-img {
+    width: 2vw;
+    height: 2vw;
+}
+.footer-item-text{
+    margin-left: 1vw;
+}

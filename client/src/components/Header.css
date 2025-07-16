@@ -1,0 +1,86 @@
+.header-container {
+    position: relative;
+    display: flex;
+    gap: 2vw;
+    border-bottom: 0.15vw solid #01162710;
+    height: 4vw;
+}
+
+.logo {
+    position: absolute;
+    width: 8vw;
+    align-self: center;
+    left: 2vw;
+}
+
+.header-items {
+    display: flex;
+    gap: 4vw;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+}
+
+.items-divider {
+    background-color: #0116275c;
+    width: 0.3vw;
+    height: 0.3vw;
+    border-radius: 50%;
+    align-self: center;
+}
+
+.header-item {
+    display: flex;
+    place-content: center;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    width: fit-content;
+    height: fit-content;
+    cursor: pointer;
+    font-size: 1vw;
+}
+
+.header-item-search {
+    position: relative;
+    z-index: 1;
+    background-color: #f78e69;
+    color: #FDFFFC;
+}
+
+@property --gradient-percentage{
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 0%;
+}
+
+.header-item-search::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #f78e69 calc(var(--gradient-percentage) - 30%), #011627 var(--gradient-percentage), #f78e69 calc(var(--gradient-percentage) - 30%));
+    background-color: #f78e69;
+    padding: 0.1vw;
+    box-sizing: border-box;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    display: block;
+    animation: border-slide 8s forwards 4s infinite;
+}
+
+@keyframes border-slide {
+    0%{
+        --gradient-percentage: 0%;
+    }
+
+    50% {
+        --gradient-percentage: 160%;
+    }
+
+    100% {
+        --gradient-percentage: 160%;
+    }
+}
