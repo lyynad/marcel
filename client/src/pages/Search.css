@@ -36,11 +36,11 @@
 .library-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    width: fit-content;
+    width: 84vw;
 }
 
 .book-card {
-    container-type: inline-size;
+    container-type: size;
     width: 40vw;
     height: 10vw;
     display: flex;
@@ -49,25 +49,57 @@
     border: 1px solid #011627;
     border-radius: 1vw;
     background-color: white;
-    display: flex;
+}
+
+@media (width < 900px) {
+    .library-container {
+        grid-template-columns: 1fr;
+    }
+    .book-card {
+        width: 80vw;
+        height: 15vw;
+    }
 }
 
 .book-cover {
     margin-left: 2cqw;
     border-radius: 1.5cqw;
-    width: 6vw;
+    width: 60cqh;
 }
 
 .book-title {
-    font-size: 1.2vw;
+    font-size: 13cqh;
     color: #011627;
     margin-left: 1cqw;
 }
 
 .book-description {
-    font-size: 0.8vw;
+    font-size: 7cqh;
     color: #011627;
     margin-left: 1cqw;
     overflow: hidden;
-    max-height: 10cqw;
+    max-height: 42cqh;
+}
+
+.page-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    grid-column: 1 / -1;
+    gap: 2vw;
+    margin: 2vw 0 2vw 0;
+}
+
+.control-arrow {
+    background-color: #F76A6A;
+    padding: 0.5vw 1vw 0.5vw 1vw;
+    color: #FDFFFC;
+    border-radius: 0.5vw;
+    cursor: pointer;
+}
+
+.control-page-number {
+    font-size: 1.2vw;
+    color: #011627;
 }

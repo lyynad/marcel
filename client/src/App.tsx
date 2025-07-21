@@ -1,8 +1,9 @@
 import './App.css'
 
-import { Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Search from './pages/Search';
 import About from './pages/About';
+import BookPage from './pages/BookPage';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Search />} />
           <Route path="/about" element={<About />} />
+          <Route path="/book/:id" element={<BookPage />} />
         </Routes>
       </div>
       
