@@ -1,6 +1,10 @@
 html, body {
   margin: 0;
   padding: 0;
+  --main-bg-color: #F9F8F8;
+  --primary-color: #F78E69;
+  --secondary-color: #011627;
+  font-family: "Montserrat", sans-serif;
 }
 
 :root {
@@ -9,21 +13,21 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+#root {
+  width: 100%;
+}
 
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  text-decoration: none;
 }
 
 body {
   margin: 0;
   display: flex;
-  min-width: 320px;
+  width: 100vw;
+  max-width: 100%;
   min-height: 100vh;
+  background-color: #F9F8F8;
 }
 
 h1 {
