@@ -7,7 +7,11 @@ import { Link } from "react-router-dom";
 import { getBooks } from "../api/api";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useScrollToggle } from "../hooks/useScrollToggle";
+
 import type { Book } from "../types/book";
+
+import ReferenceSelectionForm from "../components/ReferenceSelectionForm";
 
 function Search () {
     const [booksList, setBooksList] = useState<Book[]>();
@@ -16,6 +20,11 @@ function Search () {
     const [searchParams, setSearchParams] = useSearchParams();
     const page = searchParams.get("page") ? parseInt(searchParams.get("page")!, 10) : 1;
     
+    const [showReferencesSelection, setShowReferencesSelection] = useState<boolean>(false);
+    const [references, setReferences] = useState<string[]>([]);
+
+    useScrollToggle(showReferencesSelection);
+
     useEffect(() => {
         const pageParam = searchParams.get("page");
         const page = pageParam ? parseInt(pageParam, 10) : 1;
@@ -30,15 +39,21 @@ function Search () {
         };
 
         fetchData();
-    }, [searchParams])
+    }, [searchParams]);
 
     const handlePageChange = (newPage: number) => {
-        if (newPage < 1) return;
+        if (newPage < 1 || (newPage > page && booksList && booksList.length < 10)) return;    
         setSearchParams({ page: newPage.toString() });
+    }
+
+    const toggleReferencesSelection = () => {
+        setShowReferencesSelection(!showReferencesSelection);
     }
 
     return (
         <div style ={{ width: "100%" }}>
+            
+            {showReferencesSelection && <ReferenceSelectionForm toggleReferencesSelection={toggleReferencesSelection} /> }
 
             <div className="search-container">
                 <div className="wrapper">
@@ -46,6 +61,7 @@ function Search () {
                         <img src={searchIcon} className="search-icon" alt="Search icon" />
                         <input type="text" className="search-input" placeholder="Search something in particular" />
                     </div>
+                    <button className="set-references-button" onClick={toggleReferencesSelection}>+ Add References</button>
                     <div className="library-container">
                         {booksList?.map((book) => (
                             <Link to={`/book/${book._id}`} className="book-link" key={book._id}>

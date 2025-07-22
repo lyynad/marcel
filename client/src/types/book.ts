@@ -4,5 +4,5 @@ export interface Book {
     scartchers?: string[],
     coverImage?: string,
     description?: string,
-    tags?: string[],
+    royalroadTags?: string[],
 }

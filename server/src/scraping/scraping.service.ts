@@ -11,6 +11,11 @@ import axios from "axios";
 class ScrapingService {
     constructor(@InjectModel(Book.name) private bookModel: Model<Book>) {}
 
+    async dropAllDocuments() {
+        await this.bookModel.deleteMany({});
+        console.log("All documents dropped from the book collection.");
+    }
+
     async crawlTopRated(pages = 2) {
         for (let i = 1; i <= pages; i++) {
             const list = await this.scrapeTopRated(i);
@@ -36,7 +41,7 @@ class ScrapingService {
         return fictionUrls;
     }
 
-    async scrapeFictionPage(url: string) {
+    async scrapeFictionPage(url: string, numberOfSimilarFictions = 3) {
         const fictionId = this.extractFictionId(url);
         
         const { data } = await axios.get(url);
@@ -47,12 +52,9 @@ class ScrapingService {
         const description = $(".description p").text().trim();
         const tags = $('.tags .fiction-tag').map((_, el) => $(el).text().trim()).get();
 
-        const similarFictions = await this.getSimilarFictions(fictionId);
-
-        let scratchers: Types.ObjectId[] = [];
-        if (similarFictions && similarFictions.length) {
-            scratchers = await this.getOrCreateScratchers(similarFictions);
-        };
+        let similarFictions: Types.ObjectId[] | undefined = [];
+        if (numberOfSimilarFictions > 0)
+            similarFictions = await this.getSimilarFictions(fictionId, numberOfSimilarFictions);
 
         const fictionData = {
             royalroadId: fictionId,
@@ -60,7 +62,7 @@ class ScrapingService {
             coverImage: cover,
             description: description,
             royalroadTags: tags,
-            scratchers: scratchers  
+            scratchers: similarFictions  
         };
 
         console.log(fictionData);
@@ -70,30 +72,12 @@ class ScrapingService {
 
     async saveOrUpdate(fictionData: any) {
         await this.bookModel.updateOne(
-            { royalroadId: fictionData.id },
+            { royalroadId: fictionData.royalroadId },
             { $set: fictionData },
-            { upset: true }
+            { upsert: true }
         );
 
         console.log(`updated or inserted ${fictionData.title}`);
-    }
-
-    async getOrCreateScratchers(similarFictions: any) {
-        const royalroadIds = similarFictions.map(fic => fic.id);
-        const existingBooks = await this.bookModel.find({ royalroadId: { $in: royalroadIds } });
-
-        const existingIdsSet = new Set(existingBooks.map(book => book.royalroadId));
-        const newBooks = similarFictions.filter(fic => !existingIdsSet.has(fic.id));
-
-        if (newBooks.length) {
-            await this.bookModel.insertMany(newBooks.map(book => ({
-                royalroadId: book.id,
-                title: book.title
-            })));
-        }
-
-        const allBooks = await this.bookModel.find({ royalroadId: { $in: royalroadIds } });
-        return allBooks.map(book => book._id);
     }
 
     extractFictionId(url: string): string | null {
@@ -101,15 +85,25 @@ class ScrapingService {
         return match ? match[1] : null;
     }
 
-    async getSimilarFictions(fictionId: string | null) {
+    async getSimilarFictions(fictionId: string | null, numberOfSimilarFictions: number = 3) {
         if (fictionId !== null){
             const url = "https://www.royalroad.com/fictions/similar?fictionId=" + fictionId;
             const { data } = await axios.get(url);
 
-            const mapped = data.map(({ id, title, url }) => ({ id, title, url }));
+            const mapped = data.slice(0, numberOfSimilarFictions).map(({ id, title }) => ({ id, title, url }));
+
+            for (const fiction of mapped) {
+                const url = `https://www.royalroad.com/fiction/${fiction.id}`;
+                await this.scrapeFictionPage(url, 0);
+                await new Promise(r => setTimeout(r, 1000));
+            }
+
+            const royalroadIds = mapped.map(fic => fic.id);
+            const existingBooks = await this.bookModel.find({ royalroadId: { $in: royalroadIds } });
+            const ids = existingBooks.map(book => book._id);
 
             console.log(mapped);
-            return mapped;
+            return ids;
         }
     }
 }

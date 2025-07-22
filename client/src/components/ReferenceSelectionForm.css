@@ -1,0 +1,99 @@
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.288);
+    z-index: 1;
+}
+
+.reference-selection-form {
+    container-type: size;
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+    gap: 2vw;
+    overflow: auto;
+    background-color: #fff;
+    padding: 2vw;
+    min-height: 60vh;
+    width: 80vw;
+    box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1);
+    border-radius: 2vw;
+    z-index: 2;
+}
+
+.book-card-small {
+    container-type: size;
+    position: relative;
+    width: 30cqw;
+    height: 10cqw;
+    border: 1px solid #011627;
+    border-radius: 1cqw;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.book-card-small::after {
+    content: "ADD";
+    position: absolute;
+    background-color: #F76A6A;
+    color: #FDFFFC;
+    font-size: 8cqw;
+    width: 100%;
+    height: 100%;
+    border-radius: 3cqw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: 0.3s;
+}
+.book-card-small:hover::after {
+    opacity: 0.9;
+}
+.book-card-small.reference-added::after{
+    opacity: 0.9;
+}
+
+.cover-image-small {
+    width: 60cqh;
+    margin-left: 4cqw;
+    border-radius: 3cqw;
+}
+
+.book-info-small {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2cqw;
+}
+
+.book-title-small {
+    font-size: 4cqw;
+    color: #011627;
+    margin-left: 2cqw;
+}
+
+.book-tags-small {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 1cqw;
+    row-gap: 1.5cqw;
+    overflow: hidden;
+    height: 12cqw;
+}
+
+.book-tag-small {
+    background-color: #F76A6A;
+    color: #FDFFFC;
+    font-size: 3cqw;
+    padding: 0.75cqw;
+    border-radius: 1cqw;
+    height: fit-content;
+}

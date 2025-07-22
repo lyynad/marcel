@@ -12,7 +12,12 @@ class BookController {
         return this.bookService.findAll(paginationQuery)
     }
 
-    @Get(':id')
+    @Get('/scratchers')
+    findAllWithReferences(): Promise<Book[]> {
+        return this.bookService.findAllWithReferences();
+    }
+
+    @Get('/:id')
     findOne(@Param("id") id: string): Promise<Book> {
         return this.bookService.findOne(id);
     }

@@ -17,3 +17,12 @@ export const getBook = async (id: string) => {
     
     return await response.json();
 }
+
+export const getBooksWithReferences = async () => {
+    const url = BASE_URL + '/books/scratchers';
+
+    const response = await fetch(url);
+    if (!response.ok) console.log ("Failed to fetch books with references.");
+
+    return await response.json();
+}

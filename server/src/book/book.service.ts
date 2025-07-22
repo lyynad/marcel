@@ -31,6 +31,14 @@ class BookService {
             throw new InternalServerErrorException(`Failed to fetch book with id ${id}`, error);
         }
     }
+
+    async findAllWithReferences(): Promise<Book[]> {
+        try {
+            return await this.BookModel.find({ scratchers: { $exists: true, $ne: [] } });
+        } catch (error) {
+            throw new InternalServerErrorException('Failed to fetch books with references', error);
+        }
+    }
 }
 
 export { BookService };
