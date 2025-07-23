@@ -7,9 +7,11 @@ import type { Book } from "../types/book";
 
 interface ReferenceSelectionFormProps {
     toggleReferencesSelection: () => void;
+    currentReferences: Book[];
+    handleReferences: (references: Book[]) => void;
 }
 
-function ReferenceSelectionForm({ toggleReferencesSelection }: ReferenceSelectionFormProps) {
+function ReferenceSelectionForm({ toggleReferencesSelection, currentReferences, handleReferences }: ReferenceSelectionFormProps) {
     const [booksList, setBooksList] = useState<Book[]>([]);
     const [selectedReferences, setSelectedReferences] = useState<Book[]>([]);
 
@@ -18,6 +20,7 @@ function ReferenceSelectionForm({ toggleReferencesSelection }: ReferenceSelectio
             try {
                 const data = await api.getBooksWithReferences();
                 setBooksList(data);
+                setSelectedReferences(currentReferences);
             } catch (error) {
                 console.error("Failed to fetch books with references:", error);
             }
@@ -37,10 +40,14 @@ function ReferenceSelectionForm({ toggleReferencesSelection }: ReferenceSelectio
     }, []);
 
     const handleReferenceSelection = (book: Book) => {
-        if (selectedReferences.includes(book))
-            setSelectedReferences(selectedReferences.filter(el => el !== book));
+        if (selectedReferences.some(ref => ref._id === book._id))
+            setSelectedReferences(selectedReferences.filter(el => el._id !== book._id));
         else
             setSelectedReferences([...selectedReferences, book]);
+    }
+
+    const handleConfirmClick = () => {
+        handleReferences(selectedReferences);
     }
     
     return (
@@ -49,7 +56,7 @@ function ReferenceSelectionForm({ toggleReferencesSelection }: ReferenceSelectio
 
                 <div className="reference-selection-form">
                     {booksList?.map((book) => (
-                        <div key={book._id} className={`book-card-small ${selectedReferences.includes(book) ? "reference-added" : ""}`} onClick={() => {handleReferenceSelection(book)}} >
+                        <div key={book._id} className={`book-card-small ${selectedReferences.some(ref => ref._id === book._id) ? "reference-added" : ""}`} onClick={() => {handleReferenceSelection(book)}} >
                             <img src={book.coverImage} alt={book.title} className="cover-image-small" />
                             <div className="book-info-small">
                                 <h3 className="book-title-small">{book.title}</h3>
@@ -61,6 +68,8 @@ function ReferenceSelectionForm({ toggleReferencesSelection }: ReferenceSelectio
                             </div>
                         </div>
                     ))}
+
+                    <button className="references-accept-button" onClick={handleConfirmClick}>CONFIRM</button>
                 </div>
         </>
     );

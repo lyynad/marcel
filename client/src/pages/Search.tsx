@@ -21,7 +21,7 @@ function Search () {
     const page = searchParams.get("page") ? parseInt(searchParams.get("page")!, 10) : 1;
     
     const [showReferencesSelection, setShowReferencesSelection] = useState<boolean>(false);
-    const [references, setReferences] = useState<string[]>([]);
+    const [references, setReferences] = useState<Book[]>([]);
 
     useScrollToggle(showReferencesSelection);
 
@@ -50,10 +50,14 @@ function Search () {
         setShowReferencesSelection(!showReferencesSelection);
     }
 
+    const handleReferences = (references: Book[]) => {
+        setReferences(references);
+    }
+
     return (
         <div style ={{ width: "100%" }}>
             
-            {showReferencesSelection && <ReferenceSelectionForm toggleReferencesSelection={toggleReferencesSelection} /> }
+            {showReferencesSelection && <ReferenceSelectionForm toggleReferencesSelection={toggleReferencesSelection} currentReferences={references} handleReferences={handleReferences} /> }
 
             <div className="search-container">
                 <div className="wrapper">
@@ -62,6 +66,11 @@ function Search () {
                         <input type="text" className="search-input" placeholder="Search something in particular" />
                     </div>
                     <button className="set-references-button" onClick={toggleReferencesSelection}>+ Add References</button>
+                    <div className="references-container">
+                        {references?.map((book) => (
+                            <img src={book.coverImage} />
+                        ))}
+                    </div>
                     <div className="library-container">
                         {booksList?.map((book) => (
                             <Link to={`/book/${book._id}`} className="book-link" key={book._id}>

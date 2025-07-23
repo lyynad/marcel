@@ -47,6 +47,20 @@
     background-color: #d15b5b;
 }
 
+.references-container:not(:empty) {
+    display: flex;
+    width: 80vw;
+    height: 7vw;
+    gap: 1vw;
+    margin-top: 0.5vw;
+}
+
+.references-container img {
+    height: 100%;
+    border: 2px solid #F76A6A;
+    border-radius: 0.5vw;
+}
+
 .library-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
