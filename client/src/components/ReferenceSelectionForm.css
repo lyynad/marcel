@@ -26,6 +26,7 @@
     max-height: 70vh;
     box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1);
     border-radius: 2vw;
+    scrollbar-width: none;
     z-index: 2;
 }
 
