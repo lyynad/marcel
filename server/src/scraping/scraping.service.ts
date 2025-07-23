@@ -22,7 +22,7 @@ class ScrapingService {
             
             for (const fictionURL of list) {
                 await this.scrapeFictionPage(`https://www.royalroad.com${fictionURL}`);
-                await new Promise(r => setTimeout(r, 1000));
+                await new Promise(r => setTimeout(r, 2000));
             }
         }
     }    
@@ -52,10 +52,10 @@ class ScrapingService {
         const description = $(".description p").text().trim();
         const tags = $('.tags .fiction-tag').map((_, el) => $(el).text().trim()).get();
 
-        let similarFictions: Types.ObjectId[] | undefined = [];
-        if (numberOfSimilarFictions > 0)
+        let similarFictions: Types.ObjectId[] = [];
+        if (numberOfSimilarFictions > 0 && fictionId)
             similarFictions = await this.getSimilarFictions(fictionId, numberOfSimilarFictions);
-
+        
         const fictionData = {
             royalroadId: fictionId,
             title: title,
@@ -65,9 +65,7 @@ class ScrapingService {
             scratchers: similarFictions  
         };
 
-        console.log(fictionData);
-
-        this.saveOrUpdate(fictionData);
+        await this.saveOrUpdate(fictionData);
     }
 
     async saveOrUpdate(fictionData: any) {
@@ -77,7 +75,8 @@ class ScrapingService {
             { upsert: true }
         );
 
-        console.log(`updated or inserted ${fictionData.title}`);
+        console.log(`book ${fictionData.title} added with ${fictionData.scratchers.length} references\n`);
+
     }
 
     extractFictionId(url: string): string | null {
@@ -85,26 +84,24 @@ class ScrapingService {
         return match ? match[1] : null;
     }
 
-    async getSimilarFictions(fictionId: string | null, numberOfSimilarFictions: number = 3) {
-        if (fictionId !== null){
-            const url = "https://www.royalroad.com/fictions/similar?fictionId=" + fictionId;
-            const { data } = await axios.get(url);
+    async getSimilarFictions(fictionId: string, numberOfSimilarFictions: number = 3) {
+        const similarUrl = "https://www.royalroad.com/fictions/similar?fictionId=" + fictionId;
+        const { data } = await axios.get(similarUrl);
 
-            const mapped = data.slice(0, numberOfSimilarFictions).map(({ id, title }) => ({ id, title, url }));
+        const mapped = data.slice(0, numberOfSimilarFictions).map(({ id, title, url }) => ({ id, title, url }));
 
-            for (const fiction of mapped) {
-                const url = `https://www.royalroad.com/fiction/${fiction.id}`;
-                await this.scrapeFictionPage(url, 0);
-                await new Promise(r => setTimeout(r, 1000));
-            }
-
-            const royalroadIds = mapped.map(fic => fic.id);
-            const existingBooks = await this.bookModel.find({ royalroadId: { $in: royalroadIds } });
-            const ids = existingBooks.map(book => book._id);
-
-            console.log(mapped);
-            return ids;
+        for (const fiction of mapped) {
+            const url = `https://www.royalroad.com${fiction.url}`;
+            console.log("-ref");
+            await this.scrapeFictionPage(url, 0);
+            await new Promise(r => setTimeout(r, 2000));
         }
+
+        const royalroadIds = mapped.map(fic => fic.id);
+        const existingBooks = await this.bookModel.find({ royalroadId: { $in: royalroadIds } });
+        const ids = existingBooks.map(book => book._id);
+
+        return ids;
     }
 }
 

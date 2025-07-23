@@ -9,7 +9,7 @@
 }
 
 .reference-selection-form {
-    container-type: size;
+    container-type: inline-size;
     position: absolute;
     top: 50vh;
     left: 50vw;
@@ -22,8 +22,8 @@
     overflow: auto;
     background-color: #fff;
     padding: 2vw;
-    min-height: 60vh;
     width: 80vw;
+    max-height: 70vh;
     box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1);
     border-radius: 2vw;
     z-index: 2;
@@ -59,7 +59,7 @@
     opacity: 0.9;
 }
 .book-card-small.reference-added::after{
-    opacity: 0.9;
+    opacity: 1;
 }
 
 .cover-image-small {
