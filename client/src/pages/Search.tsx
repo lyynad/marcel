@@ -54,6 +54,10 @@ function Search () {
         setReferences(references);
     }
 
+    const handleRemoveReferenceClick = (reference: Book) => {
+        setReferences(references.filter(el => el._id !== reference._id));
+    }
+
     return (
         <div style ={{ width: "100%" }}>
             
@@ -68,7 +72,9 @@ function Search () {
                     <button className="set-references-button" onClick={toggleReferencesSelection}>+ Add References</button>
                     <div className="references-container">
                         {references?.map((book) => (
-                            <img src={book.coverImage} />
+                            <div key={book._id} onClick={() => { handleRemoveReferenceClick(book); }}>
+                                <img src={book.coverImage} />
+                            </div>
                         ))}
                     </div>
                     <div className="library-container">
