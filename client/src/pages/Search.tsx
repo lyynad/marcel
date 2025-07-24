@@ -12,6 +12,7 @@ import { useScrollToggle } from "../hooks/useScrollToggle";
 import type { Book } from "../types/book";
 
 import ReferenceSelectionForm from "../components/ReferenceSelectionForm";
+import Loading from "../components/Loading";
 
 function Search () {
     const [booksList, setBooksList] = useState<Book[]>();
@@ -64,44 +65,47 @@ function Search () {
             {showReferencesSelection && <ReferenceSelectionForm toggleReferencesSelection={toggleReferencesSelection} currentReferences={references} handleReferences={handleReferences} /> }
 
             <div className="search-container">
-                <div className="wrapper">
-                    <div className="search-bar">
-                        <img src={searchIcon} className="search-icon" alt="Search icon" />
-                        <input type="text" className="search-input" placeholder="Search something in particular" />
-                    </div>
-                    <button className="set-references-button" onClick={toggleReferencesSelection}>+ Add References</button>
-                    <div className="references-container">
-                        {references?.map((book) => (
-                            <div key={book._id} onClick={() => { handleRemoveReferenceClick(book); }}>
-                                <img src={book.coverImage} />
-                            </div>
-                        ))}
-                    </div>
-                    <div className="library-container">
-                        {booksList?.map((book) => (
-                            <Link to={`/book/${book._id}`} className="book-link" key={book._id}>
-                                <div key={book._id} className="book-card">
-                                    <img src={book.coverImage} alt={book.title} className="book-cover" />
-                                    <div className="book-info">
-                                        <h3 className="book-title">{book.title}</h3>
-                                        <p className="book-description">{book.description}</p>
-                                    </div>
+                {loading ? 
+                    <Loading /> :
+                    <div className="wrapper">
+                        <div className="search-bar">
+                            <img src={searchIcon} className="search-icon" alt="Search icon" />
+                            <input type="text" className="search-input" placeholder="Search something in particular" />
+                        </div>
+                        <button className="set-references-button" onClick={toggleReferencesSelection}>+ Add References</button>
+                        <div className="references-container">
+                            {references?.map((book) => (
+                                <div key={book._id} onClick={() => { handleRemoveReferenceClick(book); }}>
+                                    <img src={book.coverImage} />
                                 </div>
-                            </Link>
-                        ))}
-                        <div className="page-controls">
-                            <div className="control-arrow" onClick={() => { handlePageChange (page - 1)}}>
-                                <span className="arrow">&lt;</span>
-                            </div>
-                            <div className="control-page-number">
-                                <span className="page-number">{page}</span>
-                            </div>
-                            <div className="control-arrow" onClick={() => { handlePageChange (page + 1)}}>
-                                <span className="arrow">&gt;</span>
+                            ))}
+                        </div>
+                        <div className="library-container">
+                            {booksList?.map((book) => (
+                                <Link to={`/book/${book._id}`} className="book-link" key={book._id}>
+                                    <div key={book._id} className="book-card">
+                                        <img src={book.coverImage} alt={book.title} className="book-cover" />
+                                        <div className="book-info">
+                                            <h3 className="book-title">{book.title}</h3>
+                                            <p className="book-description">{book.description}</p>
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                            <div className="page-controls">
+                                <div className="control-arrow" onClick={() => { handlePageChange (page - 1)}}>
+                                    <span className="arrow">&lt;</span>
+                                </div>
+                                <div className="control-page-number">
+                                    <span className="page-number">{page}</span>
+                                </div>
+                                <div className="control-arrow" onClick={() => { handlePageChange (page + 1)}}>
+                                    <span className="arrow">&gt;</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
             </div>
 
         </div>

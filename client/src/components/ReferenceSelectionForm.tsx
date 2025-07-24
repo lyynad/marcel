@@ -5,6 +5,8 @@ import * as api from "../api/api";
 
 import type { Book } from "../types/book";
 
+import Loading from "./Loading";
+
 interface ReferenceSelectionFormProps {
     toggleReferencesSelection: () => void;
     currentReferences: Book[];
@@ -13,6 +15,8 @@ interface ReferenceSelectionFormProps {
 
 function ReferenceSelectionForm({ toggleReferencesSelection, currentReferences, handleReferences }: ReferenceSelectionFormProps) {
     const [booksList, setBooksList] = useState<Book[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+
     const [selectedReferences, setSelectedReferences] = useState<Book[]>([]);
 
     useEffect(() => {
@@ -23,6 +27,8 @@ function ReferenceSelectionForm({ toggleReferencesSelection, currentReferences, 
                 setSelectedReferences(currentReferences);
             } catch (error) {
                 console.error("Failed to fetch books with references:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -55,19 +61,22 @@ function ReferenceSelectionForm({ toggleReferencesSelection, currentReferences, 
             <div className="overlay" onClick={toggleReferencesSelection}></div>
 
                 <div className="reference-selection-form">
-                    {booksList?.map((book) => (
-                        <div key={book._id} className={`book-card-small ${selectedReferences.some(ref => ref._id === book._id) ? "reference-added" : ""}`} onClick={() => {handleReferenceSelection(book)}} >
-                            <img src={book.coverImage} alt={book.title} className="cover-image-small" />
-                            <div className="book-info-small">
-                                <h3 className="book-title-small">{book.title}</h3>
-                                <div className="book-tags-small">
-                                    {book.royalroadTags?.map((tag) => (
-                                        <div key={tag} className="book-tag-small">{tag}</div>
-                                    ))}
+                    {loading ? 
+                        <Loading /> :
+                        booksList?.map((book) => (
+                            <div key={book._id} className={`book-card-small ${selectedReferences.some(ref => ref._id === book._id) ? "reference-added" : ""}`} onClick={() => {handleReferenceSelection(book)}} >
+                                <img src={book.coverImage} alt={book.title} className="cover-image-small" />
+                                <div className="book-info-small">
+                                    <h3 className="book-title-small">{book.title}</h3>
+                                    <div className="book-tags-small">
+                                        {book.royalroadTags?.map((tag) => (
+                                            <div key={tag} className="book-tag-small">{tag}</div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    }
 
                     <button className="references-accept-button" onClick={handleConfirmClick}>CONFIRM</button>
                 </div>
