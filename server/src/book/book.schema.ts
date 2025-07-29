@@ -23,3 +23,4 @@ export class Book {
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book);
+export type BookDocument = Book & Document;

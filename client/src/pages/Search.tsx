@@ -4,7 +4,7 @@ import searchIcon from "../assets/Search.svg";
 
 import { Link } from "react-router-dom";
 
-import { getBooks } from "../api/api";
+import { getBooks, getBooksByReference } from "../api/api";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useScrollToggle } from "../hooks/useScrollToggle";
@@ -32,15 +32,24 @@ function Search () {
 
         const fetchData = async () => {
             try {
-                const data = await getBooks(page);
-                setBooksList(data);
+                if (references.length == 0){
+                    const data = await getBooks(page);
+                    setBooksList(data);
+                }
+                else {
+                    const referencesIds = references.map(book => book._id);
+                    const data = await getBooksByReference(referencesIds);
+                    setBooksList(data);
+                }
+            } catch(error) {
+                console.log("Failed to fetch data.")
             } finally {
                 setLoading(false);
             }
         };
 
         fetchData();
-    }, [searchParams]);
+    }, [searchParams, references]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage < 1 || (newPage > page && booksList && booksList.length < 10)) return;    

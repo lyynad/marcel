@@ -26,3 +26,21 @@ export const getBooksWithReferences = async () => {
 
     return await response.json();
 }
+
+export const getBooksByReference = async (references: string[]) => {
+    const url = BASE_URL + '/books/search-by-reference'
+
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            references: references
+        })
+    });
+
+    if (!response.ok) console.log ("Failed to fetch by reference.");
+
+    return await response.json();
+}

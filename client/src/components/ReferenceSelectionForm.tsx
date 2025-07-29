@@ -54,6 +54,7 @@ function ReferenceSelectionForm({ toggleReferencesSelection, currentReferences, 
 
     const handleConfirmClick = () => {
         handleReferences(selectedReferences);
+        toggleReferencesSelection();
     }
     
     return (
@@ -63,22 +64,25 @@ function ReferenceSelectionForm({ toggleReferencesSelection, currentReferences, 
                 <div className="reference-selection-form">
                     {loading ? 
                         <Loading /> :
-                        booksList?.map((book) => (
-                            <div key={book._id} className={`book-card-small ${selectedReferences.some(ref => ref._id === book._id) ? "reference-added" : ""}`} onClick={() => {handleReferenceSelection(book)}} >
-                                <img src={book.coverImage} alt={book.title} className="cover-image-small" />
-                                <div className="book-info-small">
-                                    <h3 className="book-title-small">{book.title}</h3>
-                                    <div className="book-tags-small">
-                                        {book.royalroadTags?.map((tag) => (
-                                            <div key={tag} className="book-tag-small">{tag}</div>
-                                        ))}
+                        <>
+                            {booksList?.map((book) => (
+                                <div key={book._id} className={`book-card-small ${selectedReferences.some(ref => ref._id === book._id) ? "reference-added" : ""}`} onClick={() => {handleReferenceSelection(book)}} >
+                                    <img src={book.coverImage} alt={book.title} className="cover-image-small" />
+                                    <div className="book-info-small">
+                                        <h3 className="book-title-small">{book.title}</h3>
+                                        <div className="book-tags-small">
+                                            {book.royalroadTags?.map((tag) => (
+                                                <div key={tag} className="book-tag-small">{tag}</div>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))
+                            ))}
+
+                            <button className="references-accept-button" onClick={handleConfirmClick}>CONFIRM</button>
+                        </>
                     }
 
-                    <button className="references-accept-button" onClick={handleConfirmClick}>CONFIRM</button>
                 </div>
         </>
     );

@@ -1,25 +1,32 @@
-import { Controller, Get, Post, Body, Query, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, Param, Req } from '@nestjs/common';
 import { BookService } from './book.service';
-import { Book } from "./book.schema";
-import { PaginationQueryDto } from './dto/pagination-query-dto';
+import { Book, BookDocument } from "./book.schema";
+import { PaginationQueryDto, SearchByReferenceBodyDto } from './dto/book.dto';
+
 
 @Controller('/api/books')
 class BookController {
     constructor(private readonly bookService: BookService) {}
 
     @Get()
-    findAll(@Query() paginationQuery: PaginationQueryDto): Promise<Book[]> {
+    findAll(@Query() paginationQuery: PaginationQueryDto): Promise<BookDocument[]> {
         return this.bookService.findAll(paginationQuery)
     }
 
     @Get('/scratchers')
-    findAllWithReferences(): Promise<Book[]> {
+    findAllWithReferences(): Promise<BookDocument[]> {
         return this.bookService.findAllWithReferences();
     }
 
     @Get('/:id')
-    findOne(@Param("id") id: string): Promise<Book> {
+    findOne(@Param("id") id: string): Promise<BookDocument> {
         return this.bookService.findOne(id);
+    }
+
+    @Post('/search-by-reference')
+    searchByReference(@Body() body: SearchByReferenceBodyDto, @Req() req: Request) {
+        console.log(req.body);
+        return this.bookService.searchByReference(body);
     }
 };
 
