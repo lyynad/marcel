@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
+
 import "./ReferenceSelectionForm.css";
 
 import * as api from "../api/api";
-
 import type { Book } from "../types/book";
 
 import Loading from "./Loading";
@@ -56,6 +56,13 @@ function ReferenceSelectionForm({ toggleReferencesSelection, currentReferences, 
         handleReferences(selectedReferences);
         toggleReferencesSelection();
     }
+
+    const isArrayEqual = (arrayOne: Book[], arrayTwo: Book[]): boolean => {
+        const idsOne = arrayOne.map(item => item._id);
+        const idsTwo = arrayTwo.map(item => item._id);
+
+        return idsOne.every((id, index) => id == idsTwo[index]);
+    }
     
     return (
         <>
@@ -65,21 +72,27 @@ function ReferenceSelectionForm({ toggleReferencesSelection, currentReferences, 
                     {loading ? 
                         <Loading /> :
                         <>
-                            {booksList?.map((book) => (
-                                <div key={book._id} className={`book-card-small ${selectedReferences.some(ref => ref._id === book._id) ? "reference-added" : ""}`} onClick={() => {handleReferenceSelection(book)}} >
-                                    <img src={book.coverImage} alt={book.title} className="cover-image-small" />
-                                    <div className="book-info-small">
-                                        <h3 className="book-title-small">{book.title}</h3>
-                                        <div className="book-tags-small">
-                                            {book.royalroadTags?.map((tag) => (
-                                                <div key={tag} className="book-tag-small">{tag}</div>
-                                            ))}
+                            <div className="book-card-container">
+                                {booksList?.map((book) => (
+                                    <div key={book._id} className={`book-card-small ${selectedReferences.some(ref => ref._id === book._id) ? "reference-added" : ""}`} onClick={() => {handleReferenceSelection(book)}} >
+                                        <img src={book.coverImage} alt={book.title} className="cover-image-small" />
+                                        <div className="book-info-small">
+                                            <h3 className="book-title-small">{book.title}</h3>
+                                            <div className="book-tags-small">
+                                                {book.royalroadTags?.map((tag) => (
+                                                    <div key={tag} className="book-tag-small">{tag}</div>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
 
-                            <button className="references-accept-button" onClick={handleConfirmClick}>CONFIRM</button>
+                            {!isArrayEqual(selectedReferences, currentReferences) &&
+                                <div className="references-accept-button-container">
+                                    <button className="references-accept-button" onClick={handleConfirmClick}>CONFIRM</button>
+                                </div>
+                            }
                         </>
                     }
 

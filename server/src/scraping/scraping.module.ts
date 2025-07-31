@@ -4,6 +4,7 @@ import { Model } from "mongoose";
 import { ScrapingService } from "./scraping.service";
 import { ScrapingController } from "./scraping.controller";
 import { Book, BookSchema } from "src/book/book.schema";
+import { RoyalRoadStrategy } from "./strategies/royalroad.strategy";
 
 @Module({
     imports: [
@@ -13,6 +14,9 @@ import { Book, BookSchema } from "src/book/book.schema";
         }])
     ],
     controllers: [ScrapingController],
-    providers: [ScrapingService]
+    providers: [
+        ScrapingService, 
+        RoyalRoadStrategy
+    ]
 })
 export class ScrapingModule {};

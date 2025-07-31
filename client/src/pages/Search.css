@@ -152,6 +152,9 @@
     border-radius: 0.5vw;
     cursor: pointer;
 }
+.control-arrow:hover {
+    background-color: #d15b5b;
+}
 
 .control-page-number {
     font-size: 1.2vw;
