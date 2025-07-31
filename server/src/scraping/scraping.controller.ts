@@ -5,10 +5,10 @@ import { Controller, Get } from "@nestjs/common";
 class ScrapingController {
     constructor(private readonly scrapingService: ScrapingService) {};
 
-    @Get("/api/scrape")
-    async scrape() {
-        this.scrapingService.crawlTopRated(2);
-        return { message: "scraping initiated. "};
+    @Get("/api/scrape-royal-road")
+    async runRoyalRoadScraper() {
+        this.scrapingService.runRoyalRoadScraper();
+        return { message: "scraping Royal Road initiated. "};
     }
 
     @Get("/api/scrape/drop")
