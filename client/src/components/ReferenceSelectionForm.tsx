@@ -70,7 +70,9 @@ function ReferenceSelectionForm({ toggleReferencesSelection, currentReferences, 
 
                 <div className="reference-selection-form">
                     {loading ? 
-                        <Loading /> :
+                        <div style={{"padding": "2vw"}}>
+                            <Loading /> 
+                        </div> :
                         <>
                             <div className="book-card-container">
                                 {booksList?.map((book) => (
