@@ -30,17 +30,31 @@ export const getBooksWithReferences = async () => {
 export const getBooksByReference = async (references: string[]) => {
     const url = BASE_URL + '/books/search-by-reference'
 
+    try{
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                references: references
+            })
+        });
+
+        return await response.json();
+    } catch(error){
+        console.log ("Failed to fetch by reference.");
+    }
+}
+
+export const getBooksByQuery = async (searchQuery: string) => {
+    const url = BASE_URL + `/books?searchQuery=${searchQuery}`;
+
     const response = await fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            references: references
-        })
+        method: "GET"
     });
 
-    if (!response.ok) console.log ("Failed to fetch by reference.");
+    if (!response.ok) console.log("Failed to fetch by query");
 
     return await response.json();
 }

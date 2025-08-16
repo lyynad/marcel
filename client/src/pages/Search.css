@@ -7,29 +7,9 @@
     padding-bottom: 4vw;
 }
 
-.search-bar{
-    display: flex;
-    align-items: center;
-    outline: 1px solid black;
-    border-radius: 0.5vw;
+.search-bar-container {
+    position: relative;
     width: 30vw;
-    height: 2vw;
-    padding-left: 0.5vw;
-}
-
-.search-icon {
-    width: 1.5vw;
-    height: 1.5vw;
-}
-
-.search-input {
-    border: none;
-    width: 100%;
-    background: none;
-    margin-left: 0.5vw;
-}
-.search-input:focus {
-    outline: none;
 }
 
 .set-references-button {

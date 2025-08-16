@@ -21,4 +21,10 @@ class SearchByReferenceBodyDto {
     references?: Types.ObjectId[];  
 }
 
-export { PaginationQueryDto, SearchByReferenceBodyDto };
+class SearchByQueryDto {
+    @IsOptional()
+    @Type(() => String)
+    searchQuery?: string
+}
+
+export { PaginationQueryDto, SearchByReferenceBodyDto, SearchByQueryDto };

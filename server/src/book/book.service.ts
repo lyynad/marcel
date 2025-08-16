@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { BookDocument, Book } from './book.schema';
-import { PaginationQueryDto, SearchByReferenceBodyDto } from './dto/book.dto';
+import { PaginationQueryDto, SearchByReferenceBodyDto, SearchByQueryDto } from './dto/book.dto';
 
 @Injectable()
 class BookService {
@@ -48,6 +48,32 @@ class BookService {
             return searchResults;
         } catch (error) {
             throw new InternalServerErrorException("Failed to search by reference: ", error);
+        }
+    }
+
+    async searchByQuery(query: SearchByQueryDto): Promise<BookDocument[]> {
+        try {
+            const { searchQuery } = query;
+            const mongoQuery = [
+                {
+                    $search: {
+                        index: "search_index",
+                        autocomplete: {
+                            query: searchQuery,
+                            path: "title"
+                        }
+                    }
+                },
+                {
+                    $limit: 5
+                }
+            ]
+
+            const results = await this.BookModel.aggregate(mongoQuery);
+
+            return results;
+        } catch (error) {
+            throw new InternalServerErrorException("Failed to fetch by query: ", error);
         }
     }
 }

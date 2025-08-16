@@ -1,7 +1,5 @@
 import "./Search.css";
 
-import searchIcon from "../assets/Search.svg";
-
 import { Link } from "react-router-dom";
 
 import { getBooks, getBooksByReference } from "../api/api";
@@ -13,6 +11,8 @@ import type { Book } from "../types/book";
 
 import ReferenceSelectionForm from "../components/ReferenceSelectionForm";
 import Loading from "../components/Loading";
+import SearchInput from "../components/SearchInput";
+import SearchList from "../components/SearchList";
 
 function Search () {
     const [booksList, setBooksList] = useState<Book[]>();
@@ -23,6 +23,9 @@ function Search () {
     
     const [showReferencesSelection, setShowReferencesSelection] = useState<boolean>(false);
     const [references, setReferences] = useState<Book[]>([]);
+
+    // through input
+    const [searchedList, setSearchedList] = useState<Book[]>([]);
 
     useScrollToggle(showReferencesSelection);
 
@@ -68,6 +71,10 @@ function Search () {
         setReferences(references.filter(el => el._id !== reference._id));
     }
 
+    const handleSearchedList = (list: Book[]) => {
+        setSearchedList(list);
+    }
+
     return (
         <div style ={{ width: "100%" }}>
             
@@ -77,10 +84,11 @@ function Search () {
                 {loading ? 
                     <Loading /> :
                     <div className="wrapper">
-                        <div className="search-bar">
-                            <img src={searchIcon} className="search-icon" alt="Search icon" />
-                            <input type="text" className="search-input" placeholder="Search something in particular" />
+                        <div className="search-bar-container">
+                            <SearchInput handleSearchedList={handleSearchedList} />
+                            <SearchList bookList={searchedList} />
                         </div>
+
                         <button className="set-references-button" onClick={toggleReferencesSelection}>+ Add References</button>
                         <div className="references-container">
                             {references?.map((book) => (

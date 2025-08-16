@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Query, Param, Req } from '@nestjs/common';
 import { BookService } from './book.service';
 import { Book, BookDocument } from "./book.schema";
-import { PaginationQueryDto, SearchByReferenceBodyDto } from './dto/book.dto';
+import { PaginationQueryDto, SearchByReferenceBodyDto, SearchByQueryDto } from './dto/book.dto';
 
 
 @Controller('/api/books')
@@ -24,9 +24,13 @@ class BookController {
     }
 
     @Post('/search-by-reference')
-    searchByReference(@Body() body: SearchByReferenceBodyDto, @Req() req: Request) {
-        console.log(req.body);
+    searchByReference(@Body() body: SearchByReferenceBodyDto) {
         return this.bookService.searchByReference(body);
+    }
+
+    @Get("/search-by-query")
+    searchByQuery(@Query() query: SearchByQueryDto) {
+        return this.bookService.searchByQuery(query);
     }
 };
 
